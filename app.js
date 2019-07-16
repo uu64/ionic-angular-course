@@ -1,45 +1,32 @@
-const reasonInput = document.querySelector('#input-reason');
-const amountInput = document.querySelector('#input-amount');
-const cancelBtn = document.querySelector('#btn-cancel');
-const confirmBtn = document.querySelector('#btn-confirm');
-const expensesList = document.querySelector('#expenses-list');
-const totalExpensesOutput = document.querySelector('#total-expenses');
+const courseNameInput = document.querySelector('#input-course-name');
+const courseRatingInput = document.querySelector('#input-course-rating');
+const addBtn = document.querySelector('#btn-add');
+const courseList = document.querySelector('#course-list');
 const alertCtrl = document.querySelector('ion-alert-controller');
 
-let totalExpenses = 0;
+addBtn.addEventListener('click', () => {
+  const enteredCourseName = courseNameInput.value;
+  const enteredCourseRating = courseRatingInput.value;
 
-const clear = () => {
-  reasonInput.value = '';
-  amountInput.value = '';
-}
-
-confirmBtn.addEventListener('click', () => {
-  const enteredReason = reasonInput.value;
-  const enteredAmount = amountInput.value;
-
-  if (
-    enteredReason.trim().length <= 0 ||
-    enteredAmount <= 0 ||
-    enteredAmount.trim().length <= 0
-  ){
+ if (
+    enteredCourseName.trim().length <= 0 ||
+    enteredCourseRating.trim().length <= 0 ||
+    enteredCourseRating < 1 ||
+    enteredCourseRating > 5
+  ) {
     alertCtrl.create({
-      message: 'Please enter valid reason and amount!',
-      header: 'Invalid inputs',
+      header: 'Invalid Value',
+      message: 'Please enter a valid course name and rating.',
       buttons: ['Okay']
-    }).then(alertElement => {
-      alertElement.present();
-    });
-    return
+    })
+    .then(alertEl => alertEl.present());
+    return;
   }
+
   const newItem = document.createElement('ion-item');
-  newItem.textContent = enteredReason + ': $' + enteredAmount;
+  newItem.innerHTML = `<strong>${enteredCourseName}:</strong>&nbsp;${enteredCourseRating}/5`
+  courseList.appendChild(newItem);
 
-  expensesList.appendChild(newItem);
-
-  totalExpenses += +enteredAmount;
-  totalExpensesOutput.textContent = totalExpenses;
-  clear();
-
-});
-
-cancelBtn.addEventListener('click', clear);
+  courseNameInput.value = '';
+  courseRatingInput.value = '';
+})
